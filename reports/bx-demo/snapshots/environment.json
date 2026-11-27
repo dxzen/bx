@@ -1,0 +1,25 @@
+{
+  "theme_version": "1.1",
+  "viewport_css_px": [
+    1440,
+    900
+  ],
+  "device_scale_factor": 1,
+  "browser": "Google Chrome 158.0.8127.37",
+  "platform": "macOS 27.2.1",
+  "reduced_motion": true,
+  "samples": {
+    "boardroom": {
+      "report": "report.html",
+      "sha256": "11518b5ee8fd5647af2057c4626d5972b2a68348e63c5bc7f20d1e76fb381d9d"
+    },
+    "capital": {
+      "report": "report-capital.html",
+      "sha256": "768481812ab600a4965b82d7cc56e6350eaa8af58458da92fcc11ef2305b0dbc"
+    },
+    "editorial": {
+      "report": "report-editorial.html",
+      "sha256": "33cf979eaf8197d1322552a60643837038c1b7fd8763d167088c394a423c56e0"
+    }
+  }
+}

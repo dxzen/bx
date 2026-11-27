@@ -1,0 +1,17 @@
+{
+  "boardroom": {
+    "name": "董事会简报",
+    "version": "1.1",
+    "description": "突出投入、决策条件与关键数字。"
+  },
+  "capital": {
+    "name": "资本市场路演",
+    "version": "1.1",
+    "description": "以深色背景聚焦数据、走势与临界点。"
+  },
+  "editorial": {
+    "name": "战略研究",
+    "version": "1.1",
+    "description": "用编辑式排版展开论点、证据与比较。"
+  }
+}

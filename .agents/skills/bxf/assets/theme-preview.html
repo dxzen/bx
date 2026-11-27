@@ -1,0 +1,74 @@
+<!doctype html>
+<html lang="zh-CN">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>@@PRODUCT@@ · 报告风格预览</title>
+<style>
+:root{color-scheme:light;--ink:#202625;--quiet:#575d60;--line:#cfd2d0;--paper:#f5f5f2;--active:#1d385b;font-family:"Helvetica Neue","PingFang SC","Microsoft YaHei",sans-serif;color:var(--ink);background:var(--paper)}
+*{box-sizing:border-box}body,h1,h2,p{margin:0}a{color:inherit}a:focus-visible,button:focus-visible{outline:3px solid #31649c;outline-offset:3px}
+body{min-height:100vh}header{padding:20px clamp(22px,4vw,72px);border-bottom:1px solid var(--line);display:flex;align-items:baseline;gap:12px;font-size:14px}
+header strong{font-family:Georgia,serif;font-size:23px;letter-spacing:-.08em}header span{padding-left:12px;border-left:1px solid var(--line)}
+main{display:grid;grid-template-columns:minmax(190px,250px) minmax(0,1fr);gap:clamp(22px,3.3vw,62px);padding:clamp(24px,4.5vh,70px) clamp(22px,4vw,72px);max-width:2400px;margin:auto}
+h1{font-size:clamp(27px,2.35vw,40px);line-height:1.2;letter-spacing:-.055em}aside>p{color:var(--quiet);font-size:14px;line-height:1.8;margin:12px 0 24px}
+.options{border-top:1px solid var(--line)}.choice{display:grid;grid-template-columns:32px 1fr;column-gap:12px;text-decoration:none;padding:17px 10px 17px 0;border-bottom:1px solid var(--line);align-items:start;transition:background .18s}
+.choice:hover,.choice[aria-current=true]{background:#e7e9e7}.choice[aria-current=true]{box-shadow:inset 3px 0 var(--active);padding-left:10px}.choice strong{font-size:16px}.choice small{display:block;font-size:12px;color:var(--quiet);line-height:1.6;margin-top:4px}
+.swatch{width:29px;height:29px;border-radius:50%;border:1px solid #0002;background:linear-gradient(110deg,#1b4068 0 45%,#fcfaf4 45%)}.capital .swatch{background:linear-gradient(110deg,#0b1424 0 60%,#b4df88 60%)}.editorial .swatch{background:linear-gradient(110deg,#dcdee8 0 46%,#414c75 46%)}
+.preview{min-width:0}.toolbar{display:flex;align-items:center;justify-content:space-between;gap:12px;flex-wrap:wrap;margin-bottom:12px}.tabset{display:flex;border:1px solid var(--line);border-radius:6px;padding:3px}
+.toolbar button,.standalone{font:inherit;font-size:13px}.toolbar button{border:0;padding:7px 12px;background:transparent;cursor:pointer;border-radius:3px;color:var(--quiet)}.toolbar button[aria-pressed=true]{background:white;color:var(--ink);box-shadow:0 1px 3px #16283820}
+.standalone{text-decoration:underline;text-underline-offset:4px}.poster-slot{container-type:inline-size;border:1px solid var(--line);background:white;box-shadow:0 12px 34px #24262412}.poster{position:relative;aspect-ratio:16/10;overflow:hidden}.poster iframe{border:0;pointer-events:none;position:absolute;inset:0;width:1280px;height:800px;transform-origin:top left}.selection{margin-top:14px;font-size:14px;line-height:1.75;color:var(--quiet)}.selection strong{color:var(--active)}
+@media(min-aspect-ratio:19/10) and (min-width:1200px){.preview{max-width:calc((100vh - 180px)*1.6)}}
+@media(max-width:810px){main{grid-template-columns:1fr;gap:22px}aside>p{margin:8px 0 14px}.options{display:flex}.choice{flex:1;display:flex;align-items:center;gap:8px;padding:10px 5px}.choice[aria-current=true]{box-shadow:inset 0 -2px var(--active);padding:10px 5px}.choice small{display:none}.choice strong{font-size:14px}.swatch{width:17px;height:17px}}
+@media(max-width:430px){main{padding:20px 12px}header{padding:12px}.toolbar{gap:5px}.toolbar button{padding:6px}.swatch{width:12px;height:12px}}
+</style>
+</head>
+<body>
+<header><strong>bx</strong><span>@@PRODUCT@@</span></header>
+<main>
+<aside>
+<h1>报告风格预览</h1>
+<p>用本次分析的首页和商业画布比较三套风格。</p>
+<nav class="options" aria-label="视觉主题">@@OPTIONS@@</nav>
+</aside>
+<section class="preview" aria-label="当前主题样张">
+<div class="toolbar"><div class="tabset" aria-label="预览页面">
+<button type="button" data-page="decision" aria-pressed="true">决策首页</button>
+<button type="button" data-page="canvas" aria-pressed="false">商业画布</button>
+</div><a class="standalone" target="_blank" rel="noopener" href="boardroom.html">单独打开预览 ↗</a></div>
+<div class="poster-slot"><div class="poster"><iframe src="boardroom.html?poster=1#decision" tabindex="-1" title="选中主题的预览"></iframe></div></div>
+<p class="selection" aria-live="polite">选定后，在 bxf 对话中回复「使用<strong>董事会简报</strong>」。</p>
+</section>
+</main>
+<script>
+(() => {
+  const choices = Array.from(document.querySelectorAll('.choice'));
+  const tabs = Array.from(document.querySelectorAll('[data-page]'));
+  const frame = document.querySelector('iframe');
+  const slot = document.querySelector('.poster');
+  const standalone = document.querySelector('.standalone');
+  let selected = choices[0];
+  let page = 'decision';
+  function show() {
+    const name = selected.querySelector('strong').textContent;
+    const file = selected.getAttribute('href');
+    for (const choice of choices) choice.setAttribute('aria-current', String(choice === selected));
+    for (const tab of tabs) tab.setAttribute('aria-pressed', String(tab.dataset.page === page));
+    frame.title = name + ' · ' + tabs.find(tab => tab.dataset.page === page).textContent;
+    frame.src = file + '?poster=1#' + page;
+    standalone.href = file + '#' + page;
+    document.querySelector('.selection strong').textContent = name;
+  }
+  for (const choice of choices) choice.addEventListener('click', event => {
+    if (event.metaKey || event.ctrlKey || event.shiftKey || event.altKey) return;
+    event.preventDefault();
+    selected = choice;
+    show();
+  });
+  for (const tab of tabs) tab.addEventListener('click', () => { page = tab.dataset.page; show(); });
+  function fit() { frame.style.transform = 'scale(' + slot.clientWidth / 1280 + ')'; }
+  new ResizeObserver(fit).observe(slot);
+  fit();
+})();
+</script>
+</body>
+</html>

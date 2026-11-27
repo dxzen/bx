@@ -1,72 +1,37 @@
 <!doctype html>
-<html lang="zh-CN">
+<html lang="zh-CN" data-theme="@@THEME@@" data-theme-version="@@THEME_VERSION@@">
 <head>
-<meta charset="utf-8">
-<meta name="viewport" content="width=device-width,initial-scale=1">
-<title>@@TITLE@@</title>
-<style>
-:root{color-scheme:light;--ink:#192f2a;--teal:#126052;--muted:#4e655e;--paper:#fffef9;--rule:#cbd7c9;--mint:#e6f0e7;--beige:#f5ebd9;font-family:"PingFang SC","Microsoft YaHei","Noto Sans CJK SC",system-ui,sans-serif;color:var(--ink);background:#e9eee7;line-height:1.58}
-*{box-sizing:border-box}body{margin:0}.deck{max-width:1120px;margin:0 auto;padding:22px 20px}.slide{display:flex;flex-direction:column;gap:19px;min-height:min(650px,calc(100vh - 110px));background:var(--paper);border-top:6px solid var(--teal);padding:clamp(22px,4vw,50px);margin:0 0 24px;box-shadow:0 12px 32px #203c2d12;overflow-wrap:anywhere}
-.enhanced .slide:not(.active){display:none}.slide:focus{outline:none}.meta,.footer{display:flex;flex-wrap:wrap;gap:6px 20px;justify-content:space-between;color:var(--muted);font-size:.85rem;letter-spacing:.03em}.footer{border-top:1px solid var(--rule);padding-top:12px;margin-top:auto}.slide h1,.slide h2,.slide h3,.slide p{margin:0}.slide h1,.slide h2{line-height:1.24;font-weight:680;letter-spacing:-.025em}.slide h1{font-size:clamp(2.1rem,4.4vw,3.65rem)}.slide h2{font-size:clamp(1.55rem,3.2vw,2.5rem)}.slide h3{font-size:1rem;color:var(--teal)}.lead{font-size:1.13rem;color:var(--muted);max-width:52em}.cover .verdict{font-size:1.2rem;font-weight:650;color:var(--teal);border-left:4px solid var(--teal);padding-left:12px}
-.rows{display:grid;gap:0}.row{display:grid;grid-template-columns:minmax(6em,1fr) minmax(0,3fr);gap:20px;padding:14px 0;border-top:1px solid var(--rule)}.row p{line-height:1.65}.canvas{display:grid;grid-template-columns:repeat(10,minmax(0,1fr));grid-template-areas:"partners partners activities activities value value relations relations segments segments" "partners partners resources resources value value channels channels segments segments" "costs costs costs costs costs revenue revenue revenue revenue revenue";border:1px solid var(--rule);background:var(--rule);gap:1px}.cell{min-width:0;padding:13px;background:#f4f7ef}.cell p{font-size:.95rem;margin-top:6px}.costs,.revenue{background:var(--beige)}.value{background:var(--mint)}
-table{width:100%;border-collapse:collapse;font-size:1rem;text-align:left;font-variant-numeric:tabular-nums}th,td{padding:8px 10px;vertical-align:top;border-bottom:1px solid var(--rule)}thead th{color:var(--teal);background:var(--mint)}tbody th{font-weight:600}.compare th:not(:first-child),.compare td{text-align:right}.compare th:first-child{width:43%}.note{color:var(--muted);font-size:.92rem}.evidence h3{color:var(--teal)}.cite{font-size:.9rem;color:var(--muted)}.records{display:grid;gap:15px}.evidence{border-top:1px solid var(--rule);padding-top:12px}.evidence p{margin-top:4px}.chart{margin:0;display:grid;gap:8px}.barrow{display:grid;grid-template-columns:4em minmax(0,1fr) 9em;gap:12px;align-items:center}.track{background:var(--mint);height:12px}.bar{height:100%;background:var(--teal)}.barrow output{text-align:right;font-variant-numeric:tabular-nums}figcaption{font-weight:650;color:var(--teal)}a{color:var(--teal);text-underline-offset:2px}.nav{display:none}.enhanced .nav{display:flex;justify-content:center;gap:16px;align-items:center;margin:0 16px 25px}.nav button{border:1px solid var(--teal);background:var(--paper);color:var(--teal);border-radius:4px;padding:6px 14px;font:inherit;cursor:pointer}.nav button:disabled{border-color:var(--rule);color:var(--muted);cursor:default}.nav button:focus-visible{outline:3px solid var(--teal);outline-offset:2px}.nav output{min-width:4.5em;text-align:center;font-variant-numeric:tabular-nums}
-@media screen and (max-width:760px){.canvas{grid-template-columns:repeat(3,minmax(0,1fr));grid-template-areas:"partners activities value" "resources relations segments" "channels costs revenue"}.deck{padding:12px}.slide{gap:15px;padding:20px;margin-bottom:12px}.row{grid-template-columns:minmax(5em,1fr) minmax(0,2.5fr);gap:12px}.cell{padding:9px}.barrow{grid-template-columns:3em minmax(0,1fr) 6em;gap:6px}th,td{padding:7px 4px}}
-@media screen and (max-width:480px){.canvas{grid-template-columns:repeat(2,minmax(0,1fr));grid-template-areas:"segments value" "channels relations" "partners activities" "resources revenue" "costs costs"}.row{grid-template-columns:1fr;gap:3px}.compare{font-size:.86rem}.assumptions{font-size:.8rem}.meta,.footer{font-size:.76rem}}
-.evidence .cite{overflow-wrap:anywhere;padding-inline-end:.6em}
-@page{size:A4 landscape;margin:10mm}
-@media print{*{-webkit-print-color-adjust:exact;print-color-adjust:exact}html,body{margin:0;background:#fff}.deck{display:block;padding:0;max-width:none}.slide,.enhanced .slide:not(.active){display:flex;margin:0;box-shadow:none;min-height:187mm;border-top-width:1.5mm;padding:6mm 5mm;gap:4mm;break-after:page}.slide:last-child{break-after:auto}.slide h1{font-size:32pt}.slide h2{font-size:23pt}.slide h3{font-size:12pt}.slide p,td,th{font-size:11.5pt}.meta,.footer,.cite,.note{font-size:9pt}.row{padding:3mm 0}.cell{padding:3mm}.cell p{font-size:10.5pt}.enhanced .nav,.nav{display:none}tr,.row,.evidence{break-inside:avoid}a{color:inherit}}
-</style>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>@@TITLE@@</title>
+  <style>
+@@CSS@@
+  </style>
 </head>
 <body>
-<main class="deck" aria-label="产品可行性报告">
-@@BEFORE@@
-<section class="slide" id="canvas" tabindex="-1" aria-labelledby="title-canvas">
-@@CANVAS_HEAD@@
-<h2 id="title-canvas">商业模式画布</h2>
-<div class="canvas">
-<article class="cell partners" style="grid-area:partners"><h3>重要合作伙伴</h3><p>@@partners@@</p></article>
-<article class="cell activities" style="grid-area:activities"><h3>关键业务</h3><p>@@activities@@</p></article>
-<article class="cell resources" style="grid-area:resources"><h3>核心资源</h3><p>@@resources@@</p></article>
-<article class="cell value" style="grid-area:value"><h3>价值主张</h3><p>@@value@@</p></article>
-<article class="cell relations" style="grid-area:relations"><h3>客户关系</h3><p>@@relations@@</p></article>
-<article class="cell channels" style="grid-area:channels"><h3>渠道通路</h3><p>@@channels@@</p></article>
-<article class="cell segments" style="grid-area:segments"><h3>客户细分</h3><p>@@segments@@</p></article>
-<article class="cell costs" style="grid-area:costs"><h3>成本结构</h3><p>@@costs@@</p></article>
-<article class="cell revenue" style="grid-area:revenue"><h3>收入来源</h3><p>@@revenue@@</p></article>
-</div>
-<p class="note">@@CANVAS_NOTE@@</p>
-@@CANVAS_FOOT@@
-</section>
-@@AFTER@@
-</main>
-<nav class="nav" aria-label="幻灯片翻页"><button type="button" id="previous" aria-label="上一页">上一页</button><output id="position" aria-live="polite"></output><button type="button" id="next" aria-label="下一页">下一页</button><button type="button" id="print">打印</button></nav>
-<script>
-(() => {
- const pages = Array.from(document.querySelectorAll('.slide'));
- const previous = document.getElementById('previous'), next = document.getElementById('next');
- let current = 0;
- function show(index, focus = false) {
-   current = Math.max(0, Math.min(pages.length - 1, index));
-   pages.forEach((page, i) => page.classList.toggle('active', i === current));
-   document.getElementById('position').textContent = (current + 1) + ' / ' + pages.length;
-   previous.disabled = current === 0; next.disabled = current === pages.length - 1;
-   if (focus) { pages[current].focus({preventScroll:true}); window.scrollTo(0,0); }
- }
- function fromHash() { const found = pages.findIndex(p => '#' + p.id === location.hash); show(found < 0 ? 0 : found); }
- function go(i) {
-   if (i < 0 || i >= pages.length) return;
-   history.replaceState(null, '', '#' + pages[i].id); show(i, true);
- }
- fromHash(); document.documentElement.classList.add('enhanced');
- window.addEventListener('hashchange', fromHash);
- previous.onclick = () => go(current - 1); next.onclick = () => go(current + 1);
- document.getElementById('print').onclick = () => window.print();
- window.addEventListener('keydown', event => {
-   if(event.altKey || event.ctrlKey || event.metaKey || event.shiftKey || event.target.isContentEditable) return;
-   const destination = {ArrowLeft:current-1, PageUp:current-1, ArrowRight:current+1, PageDown:current+1, Home:0, End:pages.length-1}[event.key];
-   if(destination !== undefined){event.preventDefault();go(destination);}
- });
-})();
-</script>
+  <main class="reveal" aria-label="可行性分析报告">
+    <div class="slides">
+@@SLIDES@@
+    </div>
+  </main>
+  <nav class="nav" aria-label="报告演示">
+    <button type="button" id="previous" title="上一页（←）" aria-label="上一页" aria-keyshortcuts="ArrowLeft ArrowUp PageUp">
+      <svg viewBox="0 0 24 24" aria-hidden="true" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round"><path d="M14.5 5.5 8 12l6.5 6.5"/></svg>
+    </button>
+    <output id="position" aria-label="页码" aria-live="polite" aria-atomic="true"></output>
+    <button type="button" id="next" title="下一页（→）" aria-label="下一页" aria-keyshortcuts="ArrowRight ArrowDown PageDown">
+      <svg viewBox="0 0 24 24" aria-hidden="true" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round"><path d="m9.5 5.5 6.5 6.5-6.5 6.5"/></svg>
+    </button>
+    <button type="button" id="fullscreen" title="进入全屏（F）" aria-label="进入全屏" aria-keyshortcuts="F" aria-pressed="false">
+      <svg viewBox="0 0 24 24" aria-hidden="true" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"><path d="M4 9V4h5m6 0h5v5m0 6v5h-5m-6 0H4v-5"/></svg>
+    </button>
+    <button type="button" id="print" title="打印报告" aria-label="打印报告">
+      <svg viewBox="0 0 24 24" aria-hidden="true" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"><path d="M7 8V3h10v5M7 17H4V9h16v8h-3"/><path d="M7 14h10v7H7zM16 11h1"/></svg>
+    </button>
+  </nav>
+  <div class="progress-line" aria-hidden="true"><span></span></div>
+  <script type="text/plain" id="reveal-license">@@LICENSE@@</script>
+  <script>@@REVEAL@@</script>
+  <script>@@RUNTIME@@</script>
 </body>
 </html>

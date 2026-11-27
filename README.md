@@ -1,23 +1,40 @@
 # bx：从产品想法到可行性报告与 PRD
 
-bx 是一套安装在项目内的 Codex 技能，帮助你判断一个产品想法是否值得投入，再把已选定的方向转成可以评审和验收的产品需求文档。
+bx 是一套安装在项目内的 Agent Skills，可由 Codex CLI、Gemini CLI 和 Antigravity 加载，帮助你判断一个产品想法是否值得投入，再把已选定的方向转成可以评审和验收的产品需求文档。
 
 | 技能 | 什么时候用 | 主要工作与交付 |
 | --- | --- | --- |
-| `bxf` | 有一个想法、发现某个现象、寻找商机，或需要判断是否继续投入 | 逐轮澄清目标，研究市场与竞争，核实证据，测算商业与现金模型；草案经确认后，生成包含九格商业画布的离线 HTML 决策报告 |
+| `bxf` | 有一个想法、发现某个现象、寻找商机，或需要判断是否继续投入 | 逐轮澄清目标，研究市场与竞争，核实证据，测算商业与现金模型；内容定稿后预览并选择主题，再生成带单页九格画布的离线全屏 HTML 报告 |
 | `bxp` | 已经选定可行性报告，明确要求编写或修订 PRD | 将报告中的决策转成产品范围、角色与流程、功能需求、异常处理、指标和验收标准，默认交付 `PRD.md` |
 
-典型流程：**提出想法 → 澄清目标 → 调研与测算 → 审阅草案 → 确认可行性报告 → 明确要求编写 PRD → 审阅 PRD**。
+典型流程：**提出想法 → 澄清目标 → 调研与测算 → 审阅内容 → 预览并选择主题 → 交付可行性报告 → 明确要求编写 PRD → 审阅 PRD**。
 
 ## 环境要求
 
-- 支持项目级 `.agents/skills/` 的 Codex。其他 Agent 需自行确认其技能目录及调用方式。
+- 支持项目级 `.agents/skills/` 的 Codex CLI、Gemini CLI 或 Antigravity，且已启用客户端的技能功能。
 - macOS、Linux 或 Windows 的 WSL，具备 `sh` 和 Python 3.9+；在线一键安装还需要 `curl`，以及访问 GitHub 和其下载域名的网络。
-- Python 脚本和安装程序均只使用标准库，无需安装 pip、npm 包或 Git。
+- 安装和生成报告只需要 Python 标准库。技能内置固定版本的 Reveal.js 及其 MIT 许可证。可选的浏览器排版检查使用 Playwright。
 - 开展真实研究时，Agent 需要联网检索或读取你提供的资料，并有项目目录的写入权限。没有检索能力时，可先使用已有材料，但报告须说明证据缺口。
 - 查看、翻页和打印最终 HTML 报告需要现代浏览器。报告本身可离线打开。
 
-Codex 会从项目的 `.agents/skills/` 发现技能；安装后在目标项目中打开 Codex，若技能没有出现，重启 Codex。目录发现和刷新规则见 [Codex 官方技能说明](https://learn.chatgpt.com/docs/build-skills)。
+## 客户端与调用
+
+安装程序统一写入目标项目的 `.agents/skills/bxf/` 和 `.agents/skills/bxp/`。支持该发现目录的客户端读取同一份技能、脚本和报告主题。应在目标项目中启动客户端，或将该项目作为工作区打开。
+
+下表中的提示词和斜杠命令在 Agent 对话中输入。
+
+| 客户端 | 调用 bxf / bxp | 安装后检查 |
+| --- | --- | --- |
+| Codex CLI | `$bxf …`、`$bxp …` | 可用 `/skills` 查看技能；未发现时重新启动会话 |
+| Gemini CLI | `使用 bxf …`、`使用 bxp …` | `/skills reload` 后用 `/skills list` 检查 |
+| Antigravity App / CLI | `/bxf …`、`/bxp …`，也可直接点名技能 | CLI 可用 `/skills reload`，App 可开启新对话 |
+| Antigravity 独立 IDE | `使用 bxf …`、`使用 bxp …` | 在代理侧栏的 Customizations 中检查技能 |
+
+Gemini CLI 的 `/skills` 用于管理技能；实际任务在普通提示词中点名。激活时按客户端界面完成技能授权。其余客户端也可根据任务描述自动选择相关技能。
+
+若 Gemini CLI 提示工作区未受信任并跳过项目技能，先在客户端的目录信任提示中确认当前项目，再刷新技能列表。这个条件见 [Gemini CLI 目录信任说明](https://geminicli.com/docs/cli/trusted-folders/)。
+
+目录与调用方式依据 2026-11-27 查阅的 [Codex 技能说明](https://learn.chatgpt.com/docs/build-skills)、[Gemini CLI 技能说明](https://geminicli.com/docs/cli/skills/)和 [Antigravity 技能说明](https://antigravity.google/docs/skills)。旧版客户端的发现目录或技能功能可能不同，安装后先检查是否列出 `bxf`、`bxp`。
 
 ## 一键安装
 
@@ -94,12 +111,12 @@ curl -fsSL https://raw.githubusercontent.com/dxzen/bx/master/install.sh | sh -s 
 
 ## 使用说明
 
-以下 `$bxf`、`$bxp` 示例是**发送给 Codex 的提示词**，不在终端中执行。单独发送 `$bxf` 可以从想法澄清开始；单独发送 `$bxp` 时，需要当前对话能唯一定位已交付的正式报告，否则技能会询问报告位置。
+以下示例使用通用的“使用 bxf / bxp”提示词。Codex CLI 中也可直接使用 `$bxf`、`$bxp`，Antigravity App/CLI 可使用 `/bxf`、`/bxp`。单独调用 bxf 可以从想法澄清开始；单独调用 bxp 时，需要当前对话能唯一定位已交付的正式报告，否则技能会询问报告位置。
 
 ### 示例一：评估一个产品想法
 
 ```text
-$bxf 我想为小型烘焙店做一个减少临期食材损耗的工具。
+使用 bxf，我想为小型烘焙店做一个减少临期食材损耗的工具。
 先评估上海单店商户是否有付费意愿，我能投入两个人、三个月。
 请通过提问帮我明确首个客群、付费方和最先要验证的假设。
 工作文件和最终报告放在 reports/bakery-loss/。
@@ -113,14 +130,16 @@ $bxf 我想为小型烘焙店做一个减少临期食材损耗的工具。
 我确认这版草案，请按当前范围定稿，生成离线 HTML 报告。
 ```
 
-最终报告通常为 `reports/bakery-loss/report.html`，实际以交付路径为准。报告包括建议、证据、九格商业画布、情景测算、关键假设和优先验证实验；工作目录还会保留本次输入与计算结果，方便修订。
+内容确认后，bxf 会用本次分析的首页和商业画布生成三套两页样张。打开预览，对比「董事会简报」「资本市场路演」「战略研究」，在对话中回复选定的主题。若已在定稿指令中指定主题，直接沿用。
+
+最终报告通常为 `reports/bakery-loss/report.html`，实际以交付路径为准。报告打开即铺满浏览器视口，方向键翻页，F 切换系统全屏，页码常驻。点击九格中的模块可查看关联。章节和页数按实际问题组织，例如一份报告可以用一页说明财务模型，另一份可分成经营结果、资金时序和保本条件三页。工作目录还会保留本次输入与计算结果，方便修订。
 
 ### 示例二：根据报告编写 PRD
 
 收到报告后，在当前或新的项目对话中明确指定文件：
 
 ```text
-$bxp 根据 reports/bakery-loss/report.html 编写第一版 PRD。
+使用 bxp，根据 reports/bakery-loss/report.html 编写第一版 PRD。
 范围限定为报告推荐的试点，写清核心流程、异常处理、指标和验收标准。
 ```
 
@@ -131,7 +150,7 @@ $bxp 根据 reports/bakery-loss/report.html 编写第一版 PRD。
 ### 示例三：修订现有 PRD
 
 ```text
-$bxp 继续修订 reports/bakery-loss/PRD.md，仍依据 reports/bakery-loss/report.html。
+使用 bxp，继续修订 reports/bakery-loss/PRD.md，仍依据 reports/bakery-loss/report.html。
 这版只覆盖一家门店试点，暂不做跨店调拨。
 请检查受影响的流程、指标和验收标准，并标记仍待确认的问题。
 ```
@@ -152,14 +171,20 @@ python3 -B "$skill_dir/scripts/research.py" \
 python3 -B "$skill_dir/scripts/model.py" \
   "$skill_dir/assets/example/model.json" "$output_dir/evidence.json" "$output_dir/results.json"
 
+python3 -B "$skill_dir/scripts/preview_themes.py" \
+  --brief "$skill_dir/assets/example/brief.json" \
+  --model "$output_dir/results.json" --evidence "$output_dir/evidence.json" \
+  --output-dir "$output_dir/theme-previews"
+
+# 示例明确选择董事会简报。实际任务在用户选定主题后运行。
 python3 -B "$skill_dir/scripts/render_report.py" \
   --brief "$skill_dir/assets/example/brief.json" \
   --model "$output_dir/results.json" \
   --evidence "$output_dir/evidence.json" \
-  --output "$output_dir/report.html"
+  --theme boardroom --output "$output_dir/report.html"
 ```
 
-完成后用浏览器打开 `reports/bx-demo/report.html`，查看报告与商业画布。真实任务使用自己的证据台账、参数和简报，保留来源和数据期间；示例数字与结论不能作为实际经营建议。
+打开 `reports/bx-demo/theme-previews/index.html` 切换三套样张，打开 `reports/bx-demo/report.html` 查看选定主题的完整报告。主题标识分别是 `boardroom`、`capital`、`editorial`。[报告制作说明](.agents/skills/bxf/references/slides.md) 包含简报字段、按内容分页方式和验收命令。真实任务使用自己的证据台账、参数和简报，保留来源和数据期间；示例数字与结论不能作为实际经营建议。
 
 ## 卸载
 
@@ -177,7 +202,7 @@ bx/
         │   ├── SKILL.md
         │   ├── scripts/       # 证据清洗、情景测算、报告生成
         │   ├── references/    # 研究方法、测算口径、报告制作
-        │   └── assets/        # HTML 模板与合成示例输入
+        │   └── assets/        # 三套视觉主题、离线演示引擎与合成示例输入
         └── bxp/
             ├── SKILL.md
             └── assets/        # PRD 评审模板

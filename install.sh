@@ -30,10 +30,19 @@ REQUIRED = {
         "scripts/research.py",
         "scripts/model.py",
         "scripts/render_report.py",
+        "scripts/report_layout.py",
+        "scripts/preview_themes.py",
+        "scripts/check_slides.cjs",
         "references/research-plan.md",
         "references/calculation.md",
         "references/slides.md",
         "assets/report.html",
+        "assets/presentation.css",
+        "assets/deck.js",
+        "assets/themes.json",
+        "assets/theme-preview.html",
+        "assets/vendor/reveal.js",
+        "assets/vendor/reveal.LICENSE",
         "assets/example/brief.json",
         "assets/example/evidence.csv",
         "assets/example/model.json",
@@ -180,11 +189,13 @@ def install(source, project, force):
     print("已安装 {} 到 {}".format(", ".join(changes), target_root))
     if backup is not None:
         print("原有技能已备份到：{}".format(backup))
-    print("在该项目中打开 Codex，使用 $bxf 或 $bxp；未显示时请重启 Codex。")
 
 
 def main():
-    parser = argparse.ArgumentParser(prog="install.sh", description="将 bx 技能安装到项目的 .agents/skills/ 中。")
+    parser = argparse.ArgumentParser(
+        prog="install.sh",
+        description="将 Codex CLI、Gemini CLI 和 Antigravity 共用的 bx 技能安装到项目的 .agents/skills/ 中。",
+    )
     parser.add_argument("--project", default=".", metavar="DIR", help="目标项目目录，默认当前目录；目录须已存在")
     parser.add_argument("--source", metavar="DIR", help="从本地 bx 仓库根目录安装，跳过下载")
     parser.add_argument("--force", action="store_true", help="将内容不同的同名技能备份后替换")
@@ -196,6 +207,12 @@ def main():
         with tempfile.TemporaryDirectory(prefix="bx-download-") as work:
             source = Path(args.source).expanduser().resolve() if args.source else download_source(Path(work))
             install(source, project, args.force)
+        print("在目标项目中使用技能。")
+        print("Codex CLI：发送 $bxf 或 $bxp；未发现时重新启动会话。")
+        print("Gemini CLI：/skills reload 后用 /skills list 检查，发送“使用 bxf …”或“使用 bxp …”。")
+        print("若 Gemini CLI 提示工作区未受信任，先按客户端提示确认当前项目。")
+        print("Antigravity：发送“使用 bxf …”或“使用 bxp …”；App/CLI 也支持 /bxf、/bxp。")
+        print("Antigravity CLI 可用 /skills reload 刷新；独立 IDE 在 Customizations 中检查。")
     except (OSError, URLError, ValueError, EOFError, tarfile.TarError) as error:
         parser.exit(1, "bx 安装失败：{}\n".format(error))
     except KeyboardInterrupt:

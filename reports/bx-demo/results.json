@@ -1,0 +1,466 @@
+{
+  "business": {
+    "product": "食材损耗记录与复盘",
+    "customer": "小型连锁餐饮企业",
+    "user": "门店店长",
+    "payer": "连锁总部",
+    "channel": "区域餐饮协会引荐",
+    "billing": "按连锁客户按月订阅",
+    "currency": "CNY",
+    "region": "上海",
+    "period": "2027-01 至 2027-03（示例）",
+    "months": 3
+  },
+  "assumptions": [
+    {
+      "key": "leads",
+      "label": "每月独立触达的潜在客户",
+      "unit": "客户/月",
+      "source": "H1",
+      "period": "2027-01 至 2027-03（示例）",
+      "base": 10,
+      "optimistic": 15,
+      "conservative": 6
+    },
+    {
+      "key": "conversion",
+      "label": "触达后成为付费客户的比例",
+      "unit": "比例",
+      "source": "H1",
+      "period": "2027-01 至 2027-03（示例）",
+      "base": 0.2,
+      "optimistic": 0.3,
+      "conservative": 0.1
+    },
+    {
+      "key": "onboarding_capacity",
+      "label": "每月接入能力",
+      "unit": "客户/月",
+      "source": "H1",
+      "period": "2027-01 至 2027-03（示例）",
+      "base": 3,
+      "optimistic": 4,
+      "conservative": 2
+    },
+    {
+      "key": "active_capacity",
+      "label": "可同时服务的客户上限",
+      "unit": "客户",
+      "source": "H1",
+      "period": "2027-01 至 2027-03（示例）",
+      "base": 12,
+      "optimistic": 15,
+      "conservative": 6
+    },
+    {
+      "key": "retention",
+      "label": "上月活跃客户本月留存率",
+      "unit": "比例",
+      "source": "H2",
+      "period": "2027-01 至 2027-03（示例）",
+      "base": 0.9,
+      "optimistic": 0.95,
+      "conservative": 0.75
+    },
+    {
+      "key": "price",
+      "label": "含退款前的月订阅报价",
+      "unit": "CNY/客户/月",
+      "source": "H2",
+      "period": "2027-01 至 2027-03（示例）",
+      "base": 1200,
+      "optimistic": 1500,
+      "conservative": 900
+    },
+    {
+      "key": "refund",
+      "label": "按当月账单金额计的退款率",
+      "unit": "比例",
+      "source": "H2",
+      "period": "2027-01 至 2027-03（示例）",
+      "base": 0.02,
+      "optimistic": 0.01,
+      "conservative": 0.05
+    },
+    {
+      "key": "share",
+      "label": "按退款后收入计的平台分成率",
+      "unit": "比例",
+      "source": "H3",
+      "period": "2027-01 至 2027-03（示例）",
+      "base": 0.05,
+      "optimistic": 0.04,
+      "conservative": 0.08
+    },
+    {
+      "key": "variable_cost",
+      "label": "每活跃客户月履约支出",
+      "unit": "CNY/客户/月",
+      "source": "H3",
+      "period": "2027-01 至 2027-03（示例）",
+      "base": 300,
+      "optimistic": 250,
+      "conservative": 450
+    },
+    {
+      "key": "cac",
+      "label": "每新增客户获客支出",
+      "unit": "CNY/新客户",
+      "source": "H3",
+      "period": "2027-01 至 2027-03（示例）",
+      "base": 500,
+      "optimistic": 350,
+      "conservative": 700
+    },
+    {
+      "key": "fixed",
+      "label": "每月固定运营支出",
+      "unit": "CNY/月",
+      "source": "H3",
+      "period": "2027-01 至 2027-03（示例）",
+      "base": 2200,
+      "optimistic": 2200,
+      "conservative": 2600
+    },
+    {
+      "key": "setup",
+      "label": "期初一次性启动支出",
+      "unit": "CNY",
+      "source": "H3",
+      "period": "2027-01 至 2027-03（示例）",
+      "base": 2000,
+      "optimistic": 1800,
+      "conservative": 2500
+    },
+    {
+      "key": "collection_lag",
+      "label": "客户回款账期",
+      "unit": "月",
+      "source": "H4",
+      "period": "2027-01 至 2027-03（示例）",
+      "base": 1,
+      "optimistic": 0,
+      "conservative": 2
+    },
+    {
+      "key": "payment_lag",
+      "label": "履约费付款账期",
+      "unit": "月",
+      "source": "H4",
+      "period": "2027-01 至 2027-03（示例）",
+      "base": 0,
+      "optimistic": 0,
+      "conservative": 0
+    }
+  ],
+  "formulas": [
+    {
+      "label": "容量与留存",
+      "formula": "留存 = 上月活跃 × 留存率；漏斗新签 = min(触达 × 转化率，月接入上限)；实际新签 = min(漏斗新签，并行上限 − 留存)。"
+    },
+    {
+      "label": "可得客户",
+      "formula": "当月活跃 = 留存 + 实际新签。当期累计新签为各月实际新签之和。初始客户为零，小数客户为规划期望值。"
+    },
+    {
+      "label": "收入与贡献",
+      "formula": "净收入 = 活跃 × 月报价 × (1 − 退款率)；贡献 = 净收入 × (1 − 分成率) − 活跃 × 单位履约费。"
+    },
+    {
+      "label": "期间经营结果",
+      "formula": "各月贡献减去各月固定费和实际新签 × 获客成本后加总。一次性启动支出单列入现金流。"
+    },
+    {
+      "label": "单月保本",
+      "formula": "期末月所需活跃数 = (固定费 + 期末月获客支出) ÷ 单位贡献，向上取整；计算假定该月获客支出不变。"
+    },
+    {
+      "label": "期末临界月价",
+      "formula": "在期末月活跃量与新签量不变时，((固定费 + 该月获客支出) ÷ 活跃量 + 单位履约费) ÷ [(1 − 退款率) × (1 − 分成率)]，向上取分。"
+    },
+    {
+      "label": "资金峰值",
+      "formula": "月末累计现金从负启动支出起算；净收入扣分成后按回款账期收现；履约费按付款账期支付，固定费与获客费当月付。最低累计现金取负即峰值资金需求，含尾款结清。"
+    }
+  ],
+  "scenarios": {
+    "base": {
+      "inputs": {
+        "leads": 10,
+        "conversion": 0.2,
+        "onboarding_capacity": 3,
+        "active_capacity": 12,
+        "retention": 0.9,
+        "price": 1200,
+        "refund": 0.02,
+        "share": 0.05,
+        "variable_cost": 300,
+        "cac": 500,
+        "fixed": 2200,
+        "setup": 2000,
+        "collection_lag": 1,
+        "payment_lag": 0
+      },
+      "summary": {
+        "new_per_month": 2,
+        "new_total": 6,
+        "net_revenue": 13194.72,
+        "contribution": 9168.984,
+        "operating_result": -431.016,
+        "peak_cash_need": 8486.24,
+        "ending_active": 5.42,
+        "break_even_active": 4,
+        "break_even_price": 956.4,
+        "unit_contribution": 817.2
+      },
+      "monthly": [
+        {
+          "month": 1,
+          "new": 2,
+          "active": 2,
+          "revenue": 2352,
+          "contribution": 1634.4,
+          "acquisition": 1000,
+          "operating_result": -1565.6
+        },
+        {
+          "month": 2,
+          "new": 2,
+          "active": 3.8,
+          "revenue": 4468.8,
+          "contribution": 3105.36,
+          "acquisition": 1000,
+          "operating_result": -94.64
+        },
+        {
+          "month": 3,
+          "new": 2,
+          "active": 5.42,
+          "revenue": 6373.92,
+          "contribution": 4429.224,
+          "acquisition": 1000,
+          "operating_result": 1229.224
+        }
+      ],
+      "cash_schedule": [
+        {
+          "month": 0,
+          "inflow": 0,
+          "outflow": 2000,
+          "balance": -2000
+        },
+        {
+          "month": 1,
+          "inflow": 0,
+          "outflow": 3800,
+          "balance": -5800
+        },
+        {
+          "month": 2,
+          "inflow": 2234.4,
+          "outflow": 4340,
+          "balance": -7905.6
+        },
+        {
+          "month": 3,
+          "inflow": 4245.36,
+          "outflow": 4826,
+          "balance": -8486.24
+        },
+        {
+          "month": 4,
+          "inflow": 6055.224,
+          "outflow": 0,
+          "balance": -2431.016
+        }
+      ],
+      "notes": []
+    },
+    "optimistic": {
+      "inputs": {
+        "leads": 15,
+        "conversion": 0.3,
+        "onboarding_capacity": 4,
+        "active_capacity": 15,
+        "retention": 0.95,
+        "price": 1500,
+        "refund": 0.01,
+        "share": 0.04,
+        "variable_cost": 250,
+        "cac": 350,
+        "fixed": 2200,
+        "setup": 1800,
+        "collection_lag": 0,
+        "payment_lag": 0
+      },
+      "summary": {
+        "new_per_month": 4,
+        "new_total": 12,
+        "net_revenue": 34466.85,
+        "contribution": 27285.676,
+        "operating_result": 16485.676,
+        "peak_cash_need": 1800,
+        "ending_active": 11.41,
+        "break_even_active": 4,
+        "break_even_price": 595.03,
+        "unit_contribution": 1175.6
+      },
+      "monthly": [
+        {
+          "month": 1,
+          "new": 4,
+          "active": 4,
+          "revenue": 5940,
+          "contribution": 4702.4,
+          "acquisition": 1400,
+          "operating_result": 1102.4
+        },
+        {
+          "month": 2,
+          "new": 4,
+          "active": 7.8,
+          "revenue": 11583,
+          "contribution": 9169.68,
+          "acquisition": 1400,
+          "operating_result": 5569.68
+        },
+        {
+          "month": 3,
+          "new": 4,
+          "active": 11.41,
+          "revenue": 16943.85,
+          "contribution": 13413.596,
+          "acquisition": 1400,
+          "operating_result": 9813.596
+        }
+      ],
+      "cash_schedule": [
+        {
+          "month": 0,
+          "inflow": 0,
+          "outflow": 1800,
+          "balance": -1800
+        },
+        {
+          "month": 1,
+          "inflow": 5702.4,
+          "outflow": 4600,
+          "balance": -697.6
+        },
+        {
+          "month": 2,
+          "inflow": 11119.68,
+          "outflow": 5550,
+          "balance": 4872.08
+        },
+        {
+          "month": 3,
+          "inflow": 16266.096,
+          "outflow": 6452.5,
+          "balance": 14685.676
+        }
+      ],
+      "notes": []
+    },
+    "conservative": {
+      "inputs": {
+        "leads": 6,
+        "conversion": 0.1,
+        "onboarding_capacity": 2,
+        "active_capacity": 6,
+        "retention": 0.75,
+        "price": 900,
+        "refund": 0.05,
+        "share": 0.08,
+        "variable_cost": 450,
+        "cac": 700,
+        "fixed": 2600,
+        "setup": 2500,
+        "collection_lag": 2,
+        "payment_lag": 0
+      },
+      "summary": {
+        "new_per_month": 0.6,
+        "new_total": 1.8,
+        "net_revenue": 2597.0625,
+        "contribution": 1022.4225,
+        "operating_result": -8037.5775,
+        "peak_cash_need": 12454.915,
+        "ending_active": 1.3875,
+        "break_even_active": 9,
+        "break_even_price": 3005.24,
+        "unit_contribution": 336.6
+      },
+      "monthly": [
+        {
+          "month": 1,
+          "new": 0.6,
+          "active": 0.6,
+          "revenue": 513,
+          "contribution": 201.96,
+          "acquisition": 420,
+          "operating_result": -2818.04
+        },
+        {
+          "month": 2,
+          "new": 0.6,
+          "active": 1.05,
+          "revenue": 897.75,
+          "contribution": 353.43,
+          "acquisition": 420,
+          "operating_result": -2666.57
+        },
+        {
+          "month": 3,
+          "new": 0.6,
+          "active": 1.3875,
+          "revenue": 1186.3125,
+          "contribution": 467.0325,
+          "acquisition": 420,
+          "operating_result": -2552.9675
+        }
+      ],
+      "cash_schedule": [
+        {
+          "month": 0,
+          "inflow": 0,
+          "outflow": 2500,
+          "balance": -2500
+        },
+        {
+          "month": 1,
+          "inflow": 0,
+          "outflow": 3290,
+          "balance": -5790
+        },
+        {
+          "month": 2,
+          "inflow": 0,
+          "outflow": 3492.5,
+          "balance": -9282.5
+        },
+        {
+          "month": 3,
+          "inflow": 471.96,
+          "outflow": 3644.375,
+          "balance": -12454.915
+        },
+        {
+          "month": 4,
+          "inflow": 825.93,
+          "outflow": 0,
+          "balance": -11628.985
+        },
+        {
+          "month": 5,
+          "inflow": 1091.4075,
+          "outflow": 0,
+          "balance": -10537.5775
+        }
+      ],
+      "notes": [
+        "期末月保本所需活跃客户数超过服务上限。"
+      ]
+    }
+  }
+}

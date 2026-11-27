@@ -1,0 +1,128 @@
+{
+  "business": {
+    "product": "食材损耗记录与复盘",
+    "customer": "小型连锁餐饮企业",
+    "user": "门店店长",
+    "payer": "连锁总部",
+    "channel": "区域餐饮协会引荐",
+    "billing": "按连锁客户按月订阅",
+    "currency": "CNY",
+    "region": "上海",
+    "period": "2027-01 至 2027-03（示例）",
+    "months": 3
+  },
+  "parameters": {
+    "leads": {
+      "unit": "客户/月",
+      "source": "H1",
+      "period": "2027-01 至 2027-03（示例）",
+      "base": 10,
+      "optimistic": 15,
+      "conservative": 6
+    },
+    "conversion": {
+      "unit": "比例",
+      "source": "H1",
+      "period": "2027-01 至 2027-03（示例）",
+      "base": 0.2,
+      "optimistic": 0.3,
+      "conservative": 0.1
+    },
+    "onboarding_capacity": {
+      "unit": "客户/月",
+      "source": "H1",
+      "period": "2027-01 至 2027-03（示例）",
+      "base": 3,
+      "optimistic": 4,
+      "conservative": 2
+    },
+    "active_capacity": {
+      "unit": "客户",
+      "source": "H1",
+      "period": "2027-01 至 2027-03（示例）",
+      "base": 12,
+      "optimistic": 15,
+      "conservative": 6
+    },
+    "retention": {
+      "unit": "比例",
+      "source": "H2",
+      "period": "2027-01 至 2027-03（示例）",
+      "base": 0.9,
+      "optimistic": 0.95,
+      "conservative": 0.75
+    },
+    "price": {
+      "unit": "CNY/客户/月",
+      "source": "H2",
+      "period": "2027-01 至 2027-03（示例）",
+      "base": 1200,
+      "optimistic": 1500,
+      "conservative": 900
+    },
+    "refund": {
+      "unit": "比例",
+      "source": "H2",
+      "period": "2027-01 至 2027-03（示例）",
+      "base": 0.02,
+      "optimistic": 0.01,
+      "conservative": 0.05
+    },
+    "share": {
+      "unit": "比例",
+      "source": "H3",
+      "period": "2027-01 至 2027-03（示例）",
+      "base": 0.05,
+      "optimistic": 0.04,
+      "conservative": 0.08
+    },
+    "variable_cost": {
+      "unit": "CNY/客户/月",
+      "source": "H3",
+      "period": "2027-01 至 2027-03（示例）",
+      "base": 300,
+      "optimistic": 250,
+      "conservative": 450
+    },
+    "cac": {
+      "unit": "CNY/新客户",
+      "source": "H3",
+      "period": "2027-01 至 2027-03（示例）",
+      "base": 500,
+      "optimistic": 350,
+      "conservative": 700
+    },
+    "fixed": {
+      "unit": "CNY/月",
+      "source": "H3",
+      "period": "2027-01 至 2027-03（示例）",
+      "base": 2200,
+      "optimistic": 2200,
+      "conservative": 2600
+    },
+    "setup": {
+      "unit": "CNY",
+      "source": "H3",
+      "period": "2027-01 至 2027-03（示例）",
+      "base": 2000,
+      "optimistic": 1800,
+      "conservative": 2500
+    },
+    "collection_lag": {
+      "unit": "月",
+      "source": "H4",
+      "period": "2027-01 至 2027-03（示例）",
+      "base": 1,
+      "optimistic": 0,
+      "conservative": 2
+    },
+    "payment_lag": {
+      "unit": "月",
+      "source": "H4",
+      "period": "2027-01 至 2027-03（示例）",
+      "base": 0,
+      "optimistic": 0,
+      "conservative": 0
+    }
+  }
+}

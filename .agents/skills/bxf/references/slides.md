@@ -1,29 +1,65 @@
-# 把审阅稿交付为可独立阅读的报告
+# 从分析稿到离线报告
 
-在草案获得确认后，采用 [HTML5 模板](../assets/report.html)。将 [示例简报](../assets/example/brief.json) 复制到本次分析的工作目录，保留结构，逐项替换为有依据的内容。示例把当前可做的补证、同意试点的条件、扩大投入所需的后续观察分别写明。所有价格和门槛均为合成设定。实际报告用真实产品名、版本、定稿状态和数据期间标识。脚本只依赖 Python 3.9+ 标准库，输出的一个 HTML 文件包含正文、证据、画布、表格、图表、样式和翻页逻辑。
+## 内容与主题分别保存
 
-## 复现示例
+分析稿记录本次决策、证据和推理。按要回答的问题组织章节，每页用一句有意义的标题。预览和正式报告读取**同一份**简报、计算结果、证据台账。换主题只改命令的 `--theme`。工作目录里保留三份输入以及生成的 HTML。选择主题的消息可以记入工作目录的决策记录。
 
-从本 Skill 目录运行。真实任务把三个输入及输出路径换成本次项目文件。数据口径和模型适用条件见[测算说明](calculation.md)。
+三套主题共享内容结构。**董事会简报**（`boardroom`）使用暖白、深蓝和分栏摘要，适合投入决策。**资本市场路演**（`capital`）使用深底、亮色数字及横向论据，适合演示规模、趋势和现金。**战略研究**（`editorial`）使用浅灰、靛色、衬线标题及不对称栏，适合比较假设和证据。用 [主题清单](../assets/themes.json) 记录标识和版式版本。颜色、字体、间距、情景色、九格位置和续页样式统一来自 [presentation.css](../assets/presentation.css)。报告 HTML 保留主题版本，复现历史样稿应使用当时的 skill 版本。
+
+## 实际生成顺序
+
+按[测算说明](calculation.md)得到 `evidence.json` 和 `results.json`。将审阅稿放在同一工作目录的 `brief.json`。下面的命令假定从项目根目录运行；实际任务从当前加载的 `SKILL.md` 路径确定 `skill_dir`，并以本次项目或用户指定的目录作为输出位置。工作目录不同时使用绝对路径。
 
 ```sh
-mkdir -p /tmp/product-skill-demo
-python3 scripts/research.py assets/example/evidence.csv /tmp/product-skill-demo/evidence.json
-python3 scripts/model.py assets/example/model.json /tmp/product-skill-demo/evidence.json /tmp/product-skill-demo/results.json
-python3 scripts/render_report.py --brief assets/example/brief.json --model /tmp/product-skill-demo/results.json --evidence /tmp/product-skill-demo/evidence.json --output /tmp/product-skill-demo/report.html
+skill_dir=".agents/skills/bxf"
+out="reports/bx-demo"
+python3 -B "$skill_dir/scripts/preview_themes.py" \
+  --brief "$out/brief.json" --model "$out/results.json" --evidence "$out/evidence.json" \
+  --output-dir "$out/theme-previews"
 ```
 
-## 填写简报
+提交 `theme-previews/index.html`，用户可在同一页切换主题、首页和画布，也能单独打开两页样张。这个命令只生成预览。用户在对话中选定后再运行正式生成命令。这里以用户选择董事会简报为例。
 
-- `decision` 填首页结论、决定性依据、最大不确定性、翻转条件。建议取“推进”“限定范围试点”“补证后决策”或“暂缓”。`analysis` 按影响决策的顺序组织具体论据，每页用唯一英文 `id`、可引用的标题和 `rows` 标签/正文对。内容变长就增页。角色、客群、地区、期间、采购路径、切换成本、行为实验和商业方案取舍都要落实到具体场景。
-- `canvas` 的九个短文案分别对应模板中的九格；客户、渠道、付费、价格和成本取自同一模型。用短句点出待验证项，展开论证放在其他页。多边业务分别阐明各方的所得、付出和启动顺序。
-- 文本可用 `{{business.payer}}` 或 `{{scenarios.base.summary.peak_cash_need}}` 引用结果 JSON 的标量。数值最多显示两位小数；单位写在标签或句子里，比例字段使用 0 至 1 口径。写 `[[H1]]` 引用台账中的指定编号；渲染器会核对并生成附录页链接。核对每个决定性引文的原文是否支持所在句子的判断，用台账类型说明强度。范围确认可证明谁被选为首批客群，实际订单与回款才可支持已成交与已到账。
-- `finance.metrics` 的 `path` 相对于每个情景，例如 `summary.net_revenue`；标签含单位与期间。表格及 `finance.chart` 共用情景结果，计算仅在 Python 模型中进行。条形图选择非负指标；无有效分母的值显示“未能计算”，在 `note` 或对应情景的 `notes` 写明原因。若行业需要新的核算单位，先适配模型和指标标签，再用同一份结果生成表格、图和画布。
-- `handoff` 明示已确认范围、付费方、计费、约束、非目标、成功指标与未决事项。给口径变化或用户改判附上决定来源。最后一页 `actions` 写优先实验、对象、责任人、周期或投入、通过与未通过时的行动；明确无样本、分母为零、尚未到账等情况如何处理。
-- 证据附录由 `--evidence` 的 `records`、`warnings` 生成。参数、来源和公式由 `--model` 的 `assumptions`、`formulas` 生成。避免只附工作目录中的台账路径而略去来源口径。网页来源保留日期和完整链接，本地文件来源保留可复查的文件名及定位信息。
+```sh
+python3 -B "$skill_dir/scripts/render_report.py" \
+  --brief "$out/brief.json" --model "$out/results.json" --evidence "$out/evidence.json" \
+  --theme boardroom --output "$out/report.html"
+```
 
-## 定稿核对
+已有直接调用脚本的程序可沿用旧参数，默认使用 `boardroom`。交互流程以用户选定的主题显式传参。也可加 `--preview` 单独生成指定主题的两页预览。正式文件内嵌样式、字体栈、本地分发的 Reveal.js 及 MIT 许可。无 CDN、外部字体或服务器依赖。
 
-在无网络状态打开 `report.html`。逐页核实标题和页码，用左右键、Page Up/Down、Home/End、按钮和证据链接检查导航。直接打开 `report.html#canvas` 应定位画布。禁用 JavaScript 时正文按文档顺序连续展示。
+## 简报结构
 
-核对画布和正文的客群、渠道、付款人、月价及履约成本，并抽取至少一个财务指标对照结果 JSON。浏览器打印预览选择 A4 横向并关闭浏览器自带页眉页脚，核对每张幻灯片占一页，长链接、表格数字和画布短句齐全。超长时拆解正文或移入附录，保留一页九格总览。交付实际路径和带该路径的 `$bxp` 调用命令；受权限限制未能核对的项目据实列出。
+用[可运行的简报](../assets/example/brief.json)查看完整示例。正文文字允许 `{{business.payer}}`、`{{scenarios.base.summary.peak_cash_need}}` 等标量绑定，数组可用数字下标。单位随文给出。`[[H1]]` 引用本次台账，正式报告可由此跳转附录。生成脚本对输入文字做转义。
+
+- `decision` 包含 `title`、`verdict`、`rows`。每条 `row` 是一个 `{label, text}` 论点。收紧首页，写明当前建议、决定性条件和会令建议改变的观察。可选 `metrics` 收一至两个 `{label, value, unit}`，用于最影响决策的指标。
+- `chapters` 是有序章节，每项有 `id`、`label` 和有序的 `pages`。页有唯一的 `id`、`title`，可带正文、表格或图。旧简报的 `analysis` 页列表仍受支持。研究中出现新问题时可用文字论点直接成页。想改变画布位置时，在章节序列中放入 `{"id":"canvas"}`。
+- `canvas` 填九格与 `note`。每格留一句核心判断，详细数字和行为依据放回相应章节或通过证据编号引用。无证据的结论写明待验证。预览和正式稿的画布均占一个演示页。
+- `finance.pages` 是有序财务页列表。单问资金上限时可只填一页指标。需要解释经营和现金的差别时可写三页，依次用表格对照三个情景、用折线说明最低现金月份、用临界价格描述建议翻转条件。这些页型也能直接放进任意章节。旧简报的 `finance.metrics`、`finance.chart` 仍可渲染。
+- `handoff` 记录已确定范围、约束、成功指标和未决事项。`actions` 交代优先实验、负责人、投入、通过条件和停止条件。证据、模型参数和公式附录从台账、模型生成。
+
+| 页内材料 | 字段 | 用途 |
+| --- | --- | --- |
+| 论据 | `rows: [{label, text}]` | 自由分析、备选方案、反证、访谈与行动。 |
+| 情景指标 | `metrics: [{label, path}]` | `path` 相对于各个情景，如 `summary.net_revenue`。标签给出单位与期间。 |
+| 自由表格 | `table: {headers, rows}` | 列标题数组与同宽的二维数据。适合比较采购流程或非订阅模型结果。 |
+| 情景条形图 | `chart: {label, path}` | 三种情景的非负指标，金额可带单位。 |
+| 趋势图 | `trend: {label, path, x, y, x_label, y_label}` | `path` 指向模型中的时间序列。可含负值，横坐标递增；单位写入轴标题。 |
+| 适用边界 | `note` | 表格、趋势或结论同时须读的口径、期间与引用。 |
+
+如果固定的订阅机制不适用，按实际业务建模，用自由表格、趋势或论据解释结果。不要为凑三种图而补设事实。主题和页型保持独立，主题名不写入正文。
+
+## 制作与验收
+
+在浏览器打开报告，左右或上下方向键翻页，Home/End 跳到首末，F 进入或退出系统全屏。页码与进度随当前页更新。`report.html#canvas` 可直达九格，点选或用 Tab、Enter 选择某格查看关联模块，Escape 清除高亮。窄屏允许纵向阅读。关闭 JavaScript 后全文按顺序展示。打印选 A4 横向并关闭系统页眉页脚。
+
+每份报告检查首页、九格、最密的表格及至少一条实际引文。表头、单位、数字和结论应能一并读到。检查当前视口的正文边界，超长表可以续页并重复表头，长分析按语义另开页。正式交付前确认关键数值能从同一份模型复算。
+
+维护主题时，用同一份示例输入，在同一浏览器、字体和视口下复核首页、画布和财务页的截图。对有意更改的版式更新主题版本并保留获认可的基准样张。不同项目以正文完整和可读为验收条件。
+
+安装了 Playwright 和 Chromium 的环境可运行可选检查。给出本次报告路径和独立的截图目录。它以固定视口打开本地文件，检验分页、导航、内容边界和打印。审核基准后，将其保存在单独目录。只有在输入、浏览器、系统字体和视口相同的视觉回归检查中才使用 `--baseline`。
+
+```sh
+node "$skill_dir/scripts/check_slides.cjs" "$out/report.html" "$out/checks/boardroom"
+# 有已认可的基准图时，在上一条命令末尾加 --baseline /path/to/approved/boardroom
+```

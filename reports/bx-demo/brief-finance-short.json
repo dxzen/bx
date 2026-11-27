@@ -1,0 +1,225 @@
+{
+  "version": "v2.0 · 2026-11-26",
+  "status": "测试报告 · 合成数据",
+  "decision": {
+    "title": "报损周报值得总部订阅吗？",
+    "verdict": "补证后决策",
+    "metrics": [
+      {
+        "label": "三个月经营结果 · 基准",
+        "value": "{{scenarios.base.summary.operating_result}}",
+        "unit": "元"
+      },
+      {
+        "label": "峰值资金需求 · 基准",
+        "value": "{{scenarios.base.summary.peak_cash_need}}",
+        "unit": "元"
+      }
+    ],
+    "rows": [
+      {
+        "label": "谁来买单",
+        "text": "上海小型连锁餐饮总部按月订阅，店长在闭店时记录损耗。总部是否愿为周报付费，仍需一份书面报价反馈。[[D1]] [[H2]]"
+      },
+      {
+        "label": "为什么先核现金",
+        "text": "按基准假设，履约费当月支付，总部次月回款。三个月的资金缺口高于同期经营亏损。[[H3]] [[H4]]"
+      },
+      {
+        "label": "何时启动试点",
+        "text": "核实协会名单、取得总部书面接受的报价，并确认预算能覆盖重算后的资金峰值，再启动有限试点。[[H1]] [[H2]] [[H3]] [[H4]]"
+      }
+    ]
+  },
+  "canvas": {
+    "partners": "拟由区域餐饮协会引荐；名单与合作意愿待核实。[[D1]] [[H1]]",
+    "activities": "配置报损口径，培训店长，汇总异常供总部复盘。[[D2]]",
+    "resources": "报损表单、门店映射、周报规则和运营支持。[[D2]]",
+    "value": "假设总部会据异常调整备货并减少损耗。[[H8]]",
+    "relations": "拟由总部对接、门店培训，续用以实际续费验证。[[D2]] [[H2]]",
+    "channels": "{{business.channel}}；月触达 {{scenarios.base.inputs.leads}} 家为假设。[[H1]]",
+    "segments": "{{business.customer}}；使用者为{{business.user}}，付费方为{{business.payer}}。[[D1]]",
+    "costs": "基准履约 {{scenarios.base.inputs.variable_cost}} CNY／客户月，新增获客 {{scenarios.base.inputs.cac}} CNY／家，固定 {{scenarios.base.inputs.fixed}} CNY／月。[[H3]]",
+    "revenue": "拟向{{business.payer}}按月报价 {{scenarios.base.inputs.price}} CNY／客户。基准假定账期一个月。[[D1]] [[H2]] [[H4]]",
+    "note": "按基准成本，每客户月贡献 {{scenarios.base.summary.unit_contribution}} CNY。期末月按既定新签量，保本需 {{scenarios.base.summary.break_even_active}} 家在服客户。[[H1]] [[H2]] [[H3]]"
+  },
+  "finance": {
+    "pages": [
+      {
+        "id": "finance-1",
+        "title": "三个月的收入、成本与资金需求",
+        "metrics": [
+          {
+            "label": "月报价（CNY／连锁客户）",
+            "path": "inputs.price"
+          },
+          {
+            "label": "期间净收入（CNY）",
+            "path": "summary.net_revenue"
+          },
+          {
+            "label": "期间贡献毛利（CNY）",
+            "path": "summary.contribution"
+          },
+          {
+            "label": "期间经营结果（CNY）",
+            "path": "summary.operating_result"
+          },
+          {
+            "label": "最大现金缺口（CNY）",
+            "path": "summary.peak_cash_need"
+          },
+          {
+            "label": "期末月活跃连锁（期望家数）",
+            "path": "summary.ending_active"
+          },
+          {
+            "label": "期末月保本所需在服连锁（家）",
+            "path": "summary.break_even_active"
+          }
+        ],
+        "note": "{{business.period}} · {{business.currency}}。贡献毛利扣退款、平台分成和履约；经营结果再扣固定开支与获客费用。现金缺口含启动投入及收付账期；保本家数固定期末月新增获客投入。[[H1]] [[H2]] [[H3]] [[H4]]"
+      }
+    ]
+  },
+  "handoff": {
+    "title": "先补齐试点依据，再决定是否开试",
+    "rows": [
+      {
+        "label": "已确认选择（模拟委托）",
+        "text": "{{business.customer}}为客群，{{business.user}}录入，{{business.payer}}拍板并付款。拟{{business.billing}}，按连锁隔离，店长仅见本店。[[D1]] [[D2]]"
+      },
+      {
+        "label": "纳入与排除",
+        "text": "本轮核对名单、书面报价与预算。若获准试点，再纳入门店报损或零报损、总部周复盘及报价到账记录。自动采购、POS 集成与全量推广另议。[[D1]] [[D2]]"
+      },
+      {
+        "label": "试点继续门槛",
+        "text": "暂拟向10家独立总部报价，账期届满至少2家付首期，且连续4周有效记录店日占计划营业店日至少80%。同时达标才继续验证收益。[[H5]] [[H8]]"
+      },
+      {
+        "label": "未决事项",
+        "text": "协会名单、总部预算、漏填原因与数据留存期限均待确认，分别向渠道、预算人、店长与总部运营核实。[[H1]] [[H2]] [[H7]] [[D2]]"
+      }
+    ]
+  },
+  "actions": {
+    "title": "先核资金和书面报价，再按结果决定投入",
+    "rows": [
+      {
+        "label": "取得试点依据",
+        "text": "先核渠道名单并向总部报价。取得书面接受后，用实际成本与账期重算资金峰值（示例基准 {{scenarios.base.summary.peak_cash_need}} CNY），与核准预算比较后决定是否试点。[[H1]] [[H2]] [[H3]] [[H4]]"
+      },
+      {
+        "label": "记录付款和使用",
+        "text": "若获准试点，渠道负责人统计10家去重总部的首款，账期届满至少2家按报价支付。产品负责人用完整报损或明确零报损的唯一店日除以计划营业店日，4周至少80%。[[H4]] [[H5]]"
+      },
+      {
+        "label": "检验实际收益",
+        "text": "两项均达标才续测。总部登记备货调整，对照客流相近的营业日，计算节省食材成本扣新增工时与订阅费后的净收益，并核验下期续费。[[H8]] [[H2]]"
+      },
+      {
+        "label": "何时停止",
+        "text": "预算不足则暂缓。试点任一门槛未达即暂停扩展，缺有效样本先补证。净收益未见改善或未续约，先核实影响因素，再决定是否改测单次诊断。[[H5]] [[H8]] [[H9]]"
+      }
+    ]
+  },
+  "chapters": [
+    {
+      "id": "demand",
+      "label": "市场与需求",
+      "pages": [
+        {
+          "id": "market",
+          "title": "首批客户从本地渠道逐家估算",
+          "rows": [
+            {
+              "label": "使用场景",
+              "text": "拟由{{business.user}}在闭店时登记食材、损耗量及原因。{{business.payer}}负责审批，每周复盘一次。能否据此调整备货，需要观察总部的实际处置。[[D1]] [[D2]] [[H8]]"
+            },
+            {
+              "label": "可触达市场",
+              "text": "只看{{business.region}}、{{business.period}}的{{business.customer}}；按独立连锁总部计数，同一连锁的门店合并。渠道为{{business.channel}}。[[D1]] [[H1]]"
+            },
+            {
+              "label": "首月漏斗",
+              "text": "基准每月触达 {{scenarios.base.inputs.leads}} 家，成交比例 {{scenarios.base.inputs.conversion}}，月接入上限 {{scenarios.base.inputs.onboarding_capacity}} 家。模型给出月新签潜量 {{scenarios.base.summary.new_per_month}} 家；并行服务最多 {{scenarios.base.inputs.active_capacity}} 家，期末月期望在服 {{scenarios.base.summary.ending_active}} 家。[[H1]]"
+            },
+            {
+              "label": "证据边界",
+              "text": "协会去重名单与真实转化记录均未取得。先统计独立总部、对接人及拒绝原因，再修正漏斗；此时无法从样例推断全市市场规模。[[H1]]"
+            }
+          ]
+        },
+        {
+          "id": "alternatives",
+          "title": "先查三种可能取代周报的做法",
+          "rows": [
+            {
+              "label": "直接竞品",
+              "text": "先查试点总部现用 ERP 是否已有报损模块、能否沿用门店账号。取正式报价和合同范围，换算每个连锁客户月成本。[[H6]]"
+            },
+            {
+              "label": "间接替代",
+              "text": "若库存计量误差是主要原因，驻店督导可能更有效。抽查同批报损单，比对人工盘点和周报能发现的问题与工时。[[H6]]"
+            },
+            {
+              "label": "维持现状",
+              "text": "请门店演示最近一次报损。若群消息和表格已能复盘，并行记录一周，比较新增录入工时和总部处置率。[[H6]]"
+            },
+            {
+              "label": "采购与进入",
+              "text": "模拟委托选择{{business.channel}}。拟向总部核实审批人、预算与合同流程，再取得书面试点报价反馈。[[D1]] [[H1]] [[H2]]"
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "id": "use-and-purchase",
+      "label": "使用与采购",
+      "pages": [
+        {
+          "id": "behavior",
+          "title": "把兴趣、使用和付款分别验证",
+          "rows": [
+            {
+              "label": "信任还是客套",
+              "text": "协会引荐可能促成购买，也可能只换来礼貌回复。分别统计回复、接受报价和付款的总部数。[[H7]]"
+            },
+            {
+              "label": "问责还是费时",
+              "text": "先观察闭店录入耗时。录入流程相同时比较不同问责顾虑店长的漏填原因，再单独试行简化录入。[[H7]]"
+            },
+            {
+              "label": "周报是否值得续费",
+              "text": "记录总部因哪条异常调整过备货，按可比营业日核算节省的食材成本、录入工时和订阅费。结合下期实际续费判断。[[H8]] [[H2]]"
+            }
+          ]
+        },
+        {
+          "id": "business-options",
+          "title": "先测试总部订阅的收付链条",
+          "rows": [
+            {
+              "label": "方案 A · 月订阅",
+              "text": "拟向{{business.payer}}报价 {{scenarios.base.inputs.price}} CNY／连锁客户月，经{{business.channel}}接洽。方案含培训和周报，履约工时需随单记录。[[D1]] [[D2]] [[H2]] [[H3]]"
+            },
+            {
+              "label": "方案 B · 单次诊断",
+              "text": "备选方案按一次现场盘点计价。请同一预算负责人比较两种报价，另记单次驻店人天和差旅，再试算可接受的诊断价格。[[H9]]"
+            },
+            {
+              "label": "当前取舍",
+              "text": "先核月订阅的签约与资金条件。若客户只愿购买一次诊断，按实际人天、差旅和成交价重做测算。[[D1]] [[H2]] [[H9]]"
+            },
+            {
+              "label": "执行约束",
+              "text": "拟按连锁隔离数据并逐店授权。开始录入前商定可见范围和留存期限。渠道名单、培训及客服投入仍待核实。[[D2]] [[H1]] [[H3]]"
+            }
+          ]
+        }
+      ]
+    }
+  ]
+}
